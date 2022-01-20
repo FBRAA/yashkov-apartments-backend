@@ -14,6 +14,10 @@ module.exports = mongoose => {
       floorsArray: Array,
     }
   )
+  // Так как у квартир в базе уже были присвоенные
+  // айди 101-124, то для работы сервера (поиска по айди)
+  // уникальный айди MongoDB был удалён из виртуальных
+  // параметров модели
   schema.set('toJSON', {
     virtuals: true,
     transform: (doc, ret) => {

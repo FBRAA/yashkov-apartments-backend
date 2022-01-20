@@ -4,12 +4,16 @@ const Apartment = db.apartments;
 
 exports.findAll = async (req, res) => {
   try {
-    //query params
+    //Параметры поиска
     const match = {
       rooms: req.query.rooms || {$gte: 0},
-      // rooms: req.query.rooms1 ? { $in: req.query.rooms} : {$lte:Infinity}, // filtering to multiple room choice (1 and 3 rooms, for example)
+      // Фильтрация возможна и по множественным вариантам квартир
+      // одновременно, например однушки и двушки, но я решил 
+      // отложить разработку этого варианта на другое время
+      // чтобы уложиться в поставленные сроки.
+      // rooms: req.query.rooms1 ? { $in: req.query.rooms} : {$lte:Infinity}, 
       floor: {
-        $gte: req.query.floorMin || 0,
+        $gte: req.query.floorMin || -Infinity, // На случай наличия подвалов и иных негативных этажей
         $lte: req.query.floorMax || Infinity
       },
       price: {
@@ -33,15 +37,15 @@ exports.findAll = async (req, res) => {
       return sortTypes[req.query.sortType]
     }
     
-    //total number of doc counter
+    // Счётчик общего числа отобранных документов для пагинации
     const qtyOfAps = await Apartment
     .find(match)
     .countDocuments();
-    //pagination consts
+    // Константы пагинации
     const page = req.query.page || 1
     const pageSize = req.query.pageSize || qtyOfAps
     const skip = (page - 1) * pageSize
-    // the search itself
+    // Непосредственный поиск
     const query = await Apartment
     .find(match)
     .skip(skip)
@@ -96,14 +100,13 @@ exports.floorList = async (req, res) => {
   }
 }
 
-// Create and save Apartment
 exports.create = (req, res) => {
-  //Validate req
+  //Валидация запроса
   if(!req.body.id) {
       res.status(400).send({ message: 'Content can not be empty'})
        return
   }
-  //Create an Apartment
+  //Создание документа по модели
   const apartment = new Apartment({
     id: req.body.id,
     floor: req.body.floor,
@@ -116,7 +119,7 @@ exports.create = (req, res) => {
     layout_image: req.body.layout_image,
     coordinates: req.body.coordinates
   })
-  //Save it in the DB
+  //Сохранение в базе
   Apartment
   .save(apartment)
   .then(data => {
@@ -130,7 +133,7 @@ exports.create = (req, res) => {
   })
 }
 
-// Update a Apartment by the id in the request
+// Обновление квартиры по запросу с указанием её айди
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
@@ -155,7 +158,7 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Apartment with the specified id in the request
+// Удаление квартиры по айди
 exports.delete = (req, res) => {
   const id = req.params.id;
 
