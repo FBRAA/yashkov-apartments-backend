@@ -64,7 +64,7 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const data = await Apartment.find({id: req.params.id})
+    const data = await Apartment.find({id: `${req.params.id}`})
     if(!data) {
     res.status(404).send({ message: 'Not found apartment with id' + req.params.id})
     } else {
