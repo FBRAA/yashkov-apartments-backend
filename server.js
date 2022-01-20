@@ -1,7 +1,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
-const cors = require('cors')
-
+const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 const app = express();
 
 const corsOptions = {
@@ -14,7 +15,8 @@ app.use(express.urlencoded({ extended: true }));
       
       
 
-const db = require('./models')
+const db = require('./models');
+const { config } = require('nodemon');
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true, 
