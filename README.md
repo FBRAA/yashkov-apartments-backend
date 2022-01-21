@@ -4,7 +4,7 @@
 
 ## [Перейти к модулю поиска, размещённому на платформе Netlify](https://yashkov-apartments-frontend.netlify.app/apartments)
 
-## [Перейти к исходному коду модуля](https://github.com/FBRAA/yashkov_apartments_frontend)
+## [Перейти к исходному коду модуля поиска](https://github.com/FBRAA/yashkov_apartments_frontend)
 
 # Перечень библиотек компонентов серверной стороны
 Node.js Express фреймворк [express](https://www.npmjs.com/package/express), лицензия MIT.
